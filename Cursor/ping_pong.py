@@ -19,13 +19,13 @@ BALL_SPEED = 7
 WINNING_SCORE = 10
 FPS = 60
 
-# Colors (retro arcade style)
-BG_COLOR = (15, 15, 35)
-PADDLE_COLOR = (0, 255, 136)
-BALL_COLOR = (255, 215, 0)
-TEXT_COLOR = (220, 220, 255)
+# Colors (ping pong table style)
+TABLE_GREEN = (27, 94, 32)       # Classic table felt green
+PADDLE_COLOR = (220, 20, 60)      # Red paddles
+BALL_COLOR = (255, 255, 255)      # White ball
+TEXT_COLOR = (255, 255, 255)
 ACCENT_COLOR = (255, 100, 150)
-NET_COLOR = (80, 80, 120)
+WHITE_LINE = (255, 255, 255)      # Table boundary & net
 
 # Setup display
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
@@ -78,14 +78,24 @@ class Ball:
         pygame.draw.ellipse(screen, BALL_COLOR, self.rect)
 
 
-def draw_net():
-    """Draw dashed center line."""
+def draw_table():
+    """Draw ping pong table: green surface with white boundary lines and net."""
+    # Table surface (green)
+    screen.fill(TABLE_GREEN)
+    # Top and bottom white boundary lines (table edges)
+    line_thick = 4
+    pygame.draw.rect(screen, WHITE_LINE, (0, 0, WIDTH, line_thick))
+    pygame.draw.rect(screen, WHITE_LINE, (0, HEIGHT - line_thick, WIDTH, line_thick))
+    # Left and right table edges (thin vertical lines in play area)
+    pygame.draw.rect(screen, WHITE_LINE, (0, 0, line_thick, HEIGHT))
+    pygame.draw.rect(screen, WHITE_LINE, (WIDTH - line_thick, 0, line_thick, HEIGHT))
+    # Dashed center net
     dash_length = 20
     gap = 15
     x = WIDTH // 2 - 2
     y = 0
     while y < HEIGHT:
-        pygame.draw.rect(screen, NET_COLOR, (x, y, 4, dash_length))
+        pygame.draw.rect(screen, WHITE_LINE, (x, y, 4, dash_length))
         y += dash_length + gap
 
 
@@ -101,7 +111,7 @@ def draw_scores(score_left, score_right):
 def draw_controls():
     """Draw control hints at bottom."""
     font = pygame.font.Font(None, 24)
-    text = font.render("Player 1: W / S    |    Player 2: Up / Down    |    ESC: Quit", True, (120, 120, 140))
+    text = font.render("Player 1: W / S    |    Player 2: Up / Down    |    ESC: Quit", True, (200, 200, 200))
     screen.blit(text, (WIDTH // 2 - text.get_width() // 2, HEIGHT - 35))
 
 
@@ -109,7 +119,7 @@ def show_winner(winner_text):
     """Show game over screen with winner."""
     overlay = pygame.Surface((WIDTH, HEIGHT))
     overlay.set_alpha(200)
-    overlay.fill(BG_COLOR)
+    overlay.fill(TABLE_GREEN)
     screen.blit(overlay, (0, 0))
 
     font_large = pygame.font.Font(None, 64)
@@ -194,8 +204,7 @@ def main():
                     game_over = True
 
         # Draw everything
-        screen.fill(BG_COLOR)
-        draw_net()
+        draw_table()
         draw_scores(score_left, score_right)
         draw_controls()
         paddle_left.draw()

@@ -10,7 +10,10 @@ pygame.display.set_caption("Ping-Pong")
 
 # Colors
 WHITE = (255, 255, 255)
-BLACK = (0, 0, 0)
+# Background color for ping-pong table (dark green)
+TABLE_GREEN = (0, 100, 0)
+# Paddle color (red)
+RED = (255, 0, 0)
 
 # Game variables
 PADDLE_WIDTH, PADDLE_HEIGHT = 15, 100
@@ -112,9 +115,9 @@ while running:
             game_active = False
 
     # Drawing
-    SCREEN.fill(BLACK)
-    pygame.draw.rect(SCREEN, WHITE, player_paddle)
-    pygame.draw.rect(SCREEN, WHITE, opponent_paddle)
+    SCREEN.fill(TABLE_GREEN) # Use the new table green background
+    pygame.draw.rect(SCREEN, RED, player_paddle) # Draw player paddle in red
+    pygame.draw.rect(SCREEN, RED, opponent_paddle) # Draw opponent paddle in red
     pygame.draw.ellipse(SCREEN, WHITE, ball)
     pygame.draw.aaline(SCREEN, WHITE, (WIDTH // 2, 0), (WIDTH // 2, HEIGHT))
 
